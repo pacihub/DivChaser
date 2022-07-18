@@ -25,7 +25,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-#connect database
+# giving the controller access to the database
 db = SQL("sqlite:///portfolio.db")
 
 # Ensure templates are auto-reloaded
@@ -43,17 +43,17 @@ def register():
                 return "must provide password"
             elif not request.form.get("confirmation"):
                 return "you must retype your password"
-    
+            
+            # check if passwords match
             if request.form.get("password") != request.form.get("confirmation"):
                 return("passwords don't match")
     
             #check if username already exists
             check_if_exist = db.execute("SELECT * FROM userz WHERE username = :username",
-                          username=request.form.get("username"))
-                          
+                          username=request.form.get("username"))             
             if check_if_exist:
                 return "existing username. Try logging in instead."
-            else:
+            else:                   # insert username and password hash into the database
                 db.execute("INSERT into userz (username, hash) VALUES (:username, :hash)",
                 username = request.form.get("username"),
                 hash = generate_password_hash(request.form.get("password")))
@@ -96,15 +96,14 @@ def login():
     else:
         return render_template("login.html")
 
-#   / enter API key and connect to AlphaVantage
+#   / users enter API key and connect to AlphaVantage
 @app.route("/apiconnect", methods=["GET", "POST"])  
 @login_required
 
-# Users must provide an API token
 def apifn():
         if request.method == "POST":
             users_apitoken = request.form.get("api")
-            session["apitoken"] = users_apitoken      # Store user's input in a session key, which is global
+            session["apitoken"] = users_apitoken      # Store user's API key in a session key, which is global
             return redirect('/')
         else:
             return render_template('apiconnect.html')
@@ -121,21 +120,20 @@ def homepage():
 def search_stocks():
     if request.method == 'POST':
         
-        #whatever the user entered in the front end casted to all UPPER case
+        # ticker entered by user (all upper case and white space stripped)
         symbol = request.form.get("ticker").upper().strip()
         
+        # check if a ticker has been entered
         if not symbol:
             return "please enter a ticker"
-
+        # check if ticker is valid. (external function)
         elif not tickercheck(symbol):
             return "not a valid ticker"
             
-        # my function 'tickercheck' returns me a dict for XYZ stock for example per f-n definition
-        # Storing the return dict from tickercheck in 'stockdata'
+        # Storing the return dict from tickercheck f-n in 'stockdata'
         stockdata = tickercheck(symbol)
         
-        # I need to access stock data between routes, so I store it in Session dict which is global
-        # and I can access those keys from different routes later
+        # parsing and storing stock data into session to be accessed globally 
         session["ticker"] = stockdata["symbol"]
         session["name"] = stockdata["name"]
         session["beta"] = stockdata["beta"]
@@ -147,7 +145,7 @@ def search_stocks():
 #        session["payoutratio"] = stockdata["payoutratio"]
         session["divpershare"] = stockdata["divpershare"]
         
-        print(stockdata)
+#        print(stockdata)
         return render_template("stdata.html", stockdata = stockdata)
         
     else:
@@ -155,6 +153,8 @@ def search_stocks():
  
 
 @app.route("/stdata", methods=["GET", "POST"])
+
+# saving stock to watchlist
 def add_stock_to_portfolio():
         if request.method == 'POST':    
             
@@ -163,8 +163,7 @@ def add_stock_to_portfolio():
             tickerz = session["ticker"],id = session["user_id"]):
                 return "stock is already in portfolio"
             
-            # otherwise it injects all stock data into db. \ is for new line continuation w/out breaking code
-            # I access all these values from the global session variables
+            # injects all stock data into db with the corresponding user_id
             else:
                 db.execute("INSERT INTO stockz (id, stock_name, ticker, beta, sector, divyield, industry, dividend_date, \
                 exdividend_date, divpershare) VALUES (:id, :stock_name, :ticker, :beta, :sector, :divyield, \
@@ -185,12 +184,12 @@ def newsearch():
 @app.route("/mystocks", methods=["GET", "POST"])
 @login_required
 def mystocks():
-#    if request.method == 'POST':
-        #query a list of logged-in user's stocks.
+
+        #query a list of (logged-in) user's stocks.
         my_stocks = db.execute("SELECT *  FROM stockz WHERE id = :id ORDER BY divyield DESC", 
         id = session["user_id"])
         
-        #query user's username to display on top of the html table
+        # query user's username to display on top of the html table
         current_user = db.execute("SELECT username FROM userz WHERE id = :id", id = session["user_id"])
 #        print(my_stocks)
         return render_template("mystocks.html", my_stocks = my_stocks, user=current_user[0]["username"])
@@ -200,7 +199,7 @@ def mystocks():
 @login_required
 def delstk():
     
-    #delete stock from user's favorites upon their selection
+    #delete stock from user's watchlist
     if request.method == "POST":
         del_element = request.form.get("delelement").upper()
         
@@ -211,10 +210,10 @@ def delstk():
 
 @app.route("/contact", methods = ["GET","POST"])
 def contact():
+    # CONTACT FORM 
     
     if request.method == "GET":
         return render_template("contact.html")
-    
     else:
         # grabs the info that user typed in fields and stores in variable
         feedback_name = request.form.get("name")
