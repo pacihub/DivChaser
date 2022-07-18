@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Explore
+{% endblock %}
+
+{% block main %}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="d-flex justify-content-center h-100">
+    <!-- center class = "card-body" -->
+    <center>
+        <p class="p-2 bg-dark text-white" style= "font-size:25px; text-align:center; width: 350px; "> Find stocks </p>
+        
+       <form action="/explore" method="post">
+            <input class="form-control me-2" style="width: 300px; height: 40px" type="text" name="ticker" 
+            placeholder="Search ticker" aria-label="Search">
+            <div>
+            <button class="btn btn-dark" type="submit">Find Stocks</button> </div>
+        </form>
+            
+    </center>   
+</div>
+                
+                  
+                  
+                  
+
+
+
+{% endblock %}

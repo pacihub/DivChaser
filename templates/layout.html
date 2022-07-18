@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+      <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- documentation at http://getbootstrap.com/docs/4.1/, alternative themes at https://bootswatch.com/ 
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"> -->
+        <link href="/static/bull-head.png" rel="icon">
+        <!-- "Icon made by Pixel perfect from www.flaticon.com" -->
+        <link href="/static/fpstyles.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+        <title>{% block title %} {% endblock %}</title>
+    
+</head>
+        <body>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <div class="container-fluid">
+                <a class="navbar-brand" href="/">DivChaser</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"> </span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  {% if session.user_id %}
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"> <a class="nav-link active" aria-current="page" href="/mystocks">My Stocks</a> </li>
+                    <li class="nav-item">  <a class="nav-link" href="/explore">Explore</a> </li>
+                    
+                    
+                    <li class="nav-item">
+                      <a class="nav-link" href="/apiconnect" tabindex="-1" aria-disabled="true">API Connect</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="/contact" tabindex="-1" aria-disabled="true">Contact Us</a>
+                    </li>
+                  </ul>
+                  
+                  <ul class="navbar-nav ml-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                        </ul>
+                  
+                  {% else %}
+                   <ul class="navbar-nav ml-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                    </ul>
+                  {% endif %}  
+                </div>
+              </div>
+            </nav>
+         <main class="container p-5">
+            {% block main %}
+            
+            
+            {% endblock %}
+        </main>
+        </body>
+</html>

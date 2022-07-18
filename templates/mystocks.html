@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Stocks
+{% endblock %}
+
+{% block main %}
+
+
+ <table class="table table-dark">
+  
+  <thead>
+    <tr style= "font-size:25px; text-align:center">
+        <th colspan = "2"> &nbsp; {{user}}'s list </th>
+    </tr>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Company</th>
+      <th scope="col">Ticker</th>
+      <th scope="col">Sector</th>
+      <th scope="col">Industry</th>
+      <th scope="col">Div Yield/y</th>
+      <th scope="col">Div/Share</th>
+      <th scope="col">Div Date</th>
+      <th scope="col">exDiv Date</th>
+      <th scope="col">Beta</th>
+ <!--     <th scope="col">Payout Ratio</th> -->
+      
+    </tr>
+  </thead>
+  <tbody>
+      
+ {% for i in my_stocks %}
+    <tr>
+      <th scope="row">   </th>
+      <td >{{ i['stock_name'] }}</td>
+      <td>{{ i['ticker'] }}</td>
+      <td>{{ i['sector'] }}</td>
+      <td>{{ i['industry'] }}</td>
+      <td>{{ i['divyield'] }}</td>
+      <td><span>&#36;</span>{{ i['divpershare'] }}</td>
+       <td>{{ i['dividend_date'] }}</td>
+      <td>{{ i['exdividend_date'] }}</td>
+      <td>{{ i['beta'] }}</td>
+ <!--     <td>{{ i['payout_ratio'] }}</td> -->
+      
+    </tr>
+    {% endfor %}
+    
+  </tbody>
+</table>
+
+
+    <form action="/delstock" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" 
+            name="delelement" placeholder="to remove a stock, type ticker here" style="width: 300px; height: 40px" type="text">
+        </div>
+
+        <button class="btn btn-dark" type="submit">Delete</button>
+    </form>
+
+{% endblock %}

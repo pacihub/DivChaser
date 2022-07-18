@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Contact Us
+{% endblock %}
+
+{% block main %}
+
+
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+	<div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="well well-sm">
+          <form class="form-horizontal" action="" method="post">
+          <fieldset>
+            <h1 class="text-center" style= "font-size:25px; text-align:left">Contact us</h1>
+    
+            <!-- Name input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="name">Name</label>
+              <div class="col-md-9">
+                <input id="name" name="name" type="text" placeholder="Your name" class="form-control">
+              </div>
+            </div>
+            <br>
+    
+            <!-- Email input-->
+            <div class="form-group">
+             
+              <div class="col-md-9">
+                <input id="email" name="email" type="text" placeholder="Your email" class="form-control">
+              </div>
+            </div>
+            <br>
+    
+            <!-- Message body -->
+            <div class="form-group">
+              
+              <div class="col-md-9">
+                <textarea class="form-control" id="message" name="message" placeholder="Leave us a note here..." rows="5"></textarea>
+              </div>
+            </div>
+    
+            <!-- Form actions -->
+            <div class="form-group">
+              <div class="col-md-12 text-right">
+                <button type="submit" class="btn btn-dark btn-lg">Submit</button>
+              </div>
+            </div>
+          </fieldset>
+          </form>
+        </div>
+      </div>
+	</div>
+</div>
+
+
+
+{% endblock %}
+
